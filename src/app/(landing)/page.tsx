@@ -1,10 +1,10 @@
-import { FAQs } from "@/components/faqs/faqs";
-import { Features } from "@/components/features/features";
-import { Footer } from "@/components/footer/footer";
-import { Hero } from "@/components/hero/hero";
-import { Quote } from "@/components/quote/quote";
-import { Showcase } from "@/components/showcase/showcase";
-import { Testimonials } from "@/components/testimonials/testimonials";
+import { Hero } from "@/components/landing/hero/hero";
+import { Showcase } from "@/components/landing/showcase/showcase";
+import { Quote } from "@/components/landing/quote/quote";
+import { Features } from "@/components/landing/features/features";
+import { Testimonials } from "@/components/landing/testimonials/testimonials";
+import { FAQs } from "@/components/landing/faqs/faqs";
+import { Footer } from "@/components/landing/footer/footer";
 
 export default function Home() {
   return (
