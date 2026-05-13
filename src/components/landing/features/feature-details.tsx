@@ -1,4 +1,4 @@
-import type { Feature } from "@/components/features/features";
+import type { Feature } from "@/components/landing/features/features";
 import { cn } from "@/lib/utils";
 
 type FeatureDetailsProps = {

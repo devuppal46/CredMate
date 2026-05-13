@@ -1,4 +1,4 @@
-import { Nav } from "@/components/hero/nav";
+import { Nav } from "@/components/landing/hero/nav";
 import { BackgroundBlur } from "@/components/ui/background-blur";
 import { Button } from "@/components/ui/button";
 import { Pill, PillAvatar, PillAvatarGroup } from "@/components/ui/pill";

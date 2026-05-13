@@ -1,7 +1,7 @@
 "use client";
 
-import type { Feature } from "@/components/features/features";
-import { FeatureCard } from "@/components/features/feature-card";
+import type { Feature } from "@/components/landing/features/features";
+import { FeatureCard } from "@/components/landing/features/feature-card";
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";

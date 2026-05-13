@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { TestimonialMarquee } from "@/components/testimonials/testimonial-marquee";
+import { TestimonialMarquee } from "@/components/landing/testimonials/testimonial-marquee";
 
 export type Testimonial = {
   name: string;

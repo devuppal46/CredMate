@@ -1,7 +1,7 @@
 "use client";
 
-import { TestimonialCard } from "@/components/testimonials/testimonial-card";
-import type { Testimonial } from "@/components/testimonials/testimonials";
+import { TestimonialCard } from "@/components/landing/testimonials/testimonial-card";
+import type { Testimonial } from "@/components/landing/testimonials/testimonials";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 import { cn } from "@/lib/utils";
 

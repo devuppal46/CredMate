@@ -1,5 +1,5 @@
-import { Wreath } from "@/components/showcase/wreath";
-import { Star, HalfStar } from "@/components/showcase/star";
+import { Wreath } from "@/components/landing/showcase/wreath";
+import { Star, HalfStar } from "@/components/landing/showcase/star";
 
 export function Showcase() {
   return (

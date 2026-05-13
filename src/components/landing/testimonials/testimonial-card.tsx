@@ -1,5 +1,5 @@
-import { Star } from "@/components/showcase/star";
-import type { Testimonial } from "@/components/testimonials/testimonials";
+import { Star } from "@/components/landing/showcase/star";
+import type { Testimonial } from "@/components/landing/testimonials/testimonials";
 
 type Props = {
   testimonial: Testimonial;

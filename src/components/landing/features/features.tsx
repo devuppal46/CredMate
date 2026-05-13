@@ -1,5 +1,5 @@
-import { FeaturesCarousel } from "@/components/features/features-carousel";
-import { FeaturesTabs } from "@/components/features/features-tabs";
+import { FeaturesCarousel } from "@/components/landing/features/features-carousel";
+import { FeaturesTabs } from "@/components/landing/features/features-tabs";
 import { Badge } from "@/components/ui/badge";
 import { ActivityIcon, ChartNoAxesColumnIcon, SlidersIcon, ZapIcon } from "lucide-react";
 

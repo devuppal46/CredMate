@@ -1,6 +1,6 @@
 "use client";
 
-import { PlanSelect, plans } from "@/components/pricing/plan-select";
+import { PlanSelect, plans } from "@/components/landing/pricing/plan-select";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
