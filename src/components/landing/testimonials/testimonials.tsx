@@ -12,38 +12,42 @@ export type Testimonial = {
 
 const testimonials = [
   {
-    name: "Aditya Roy",
-    date: "Jan 15",
-    title: "Finally got my car loan approved",
-    content: `"I was rejected twice by banks and didn't know why. CredMate's report pointed out an old unpaid bill I completely forgot about. Cleared it, and my score shot up."`,
+    name: "Rohit Mehra",
+    date: "Mar 12",
+    title: "Understood my credit mistakes",
+    content:
+      `"CredMate showed me exactly why my score kept dropping. I fixed two bad habits within a month and already saw improvement."`,
     rating: 5,
   },
   {
-    name: "Sneha Kapoor",
-    date: "Feb 1",
-    title: "Stopped the EMI panic",
-    content: `"I used to panic every time salary day came near. The AI helped me restructure my payments so I'm not broke by the 5th of the month. A genuine lifesaver."`,
+    name: "Priya Sharma",
+    date: "Apr 2",
+    title: "Made repayments less stressful",
+    content:
+      `"The spending insights and reminders helped me stop missing due dates. My finances finally feel under control."`,
     rating: 4,
   },
   {
-    name: "Faizan Ahmed",
-    date: "Jan 20",
-    title: "Better than spammy credit apps",
-    content: `"Other apps just try to sell me credit cards. CredMate actually analyzed my debt and told me how to close my personal loan 6 months early to save interest."`,
+    name: "Arjun Verma",
+    date: "Mar 25",
+    title: "Actually useful financial advice",
+    content:
+      `"Most apps just push loans. CredMate explained my report in simple terms and gave practical steps I could follow immediately."`,
     rating: 5,
   },
   {
-    name: "Karthik N.",
-    date: "Feb 8",
-    title: "The chat feature is brilliant",
-    content: `"I didn't understand what 'credit utilization' meant until I asked the AI. It explained it in simple Hindi/English and helped me fix my card usage habits."`,
+    name: "Neha Khan",
+    date: "Apr 10",
+    title: "Loved the AI explanations",
+    content:
+      `"I asked questions about credit utilization and loan eligibility, and the AI explained everything clearly without complicated jargon."`,
     rating: 4,
   },
 ] satisfies Testimonial[];
 
 export function Testimonials() {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-6 py-14 md:py-25">
+    <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-6 py-10 md:py-20">
       <Badge variant="secondary" className="mb-2 uppercase">
         Testimonial
       </Badge>

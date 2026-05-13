@@ -29,7 +29,7 @@ export function FeaturesTabs({ features, className }: Props) {
       </TabsList>
       {features.map((feature) => (
         <TabsContent key={feature.title} value={feature.title}>
-          <div className="bg-card flex w-full justify-center rounded-lg border p-8 pb-0" />
+          {/* content intentionally omitted (image removed) */}
         </TabsContent>
       ))}
     </Tabs>

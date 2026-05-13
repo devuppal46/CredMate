@@ -13,33 +13,33 @@ export type Feature = {
 const features = [
   {
     icon: <SlidersIcon size={20} />,
-    title: "Full Brand Control",
-    description: "Make it yours—customize logos, colors, domains, and more.",
+    title: "Smart Credit Score Analysis",
+    description: "Understand your credit score beyond just numbers.",
     image: "/app-image-.png",
   },
   {
     icon: <ZapIcon size={20} />,
-    title: "Fast, Native Performance",
-    description: "Built with native tech for fast, smooth performance.",
+    title: "Personalized AI Roadmap",
+    description: "Get a step-by-step plan to improve your credit health.",
     image: "/app-image-1.png",
   },
   {
     icon: <ActivityIcon size={20} />,
-    title: "Push Notifications",
-    description: "Engage users with real-time updates and alerts.",
+    title: "Credit Report Insights",
+    description: "Spot problems in your credit report instantly.",
     image: "/app-image-1.png",
   },
   {
     icon: <ChartNoAxesColumnIcon size={20} />,
-    title: "Built-in Analytics",
-    description: "Monitor activity and performance with live data.",
+    title: "Connect with Financial Advisors",
+    description: "Get personalized advice to improve your credit health.",
     image: "/app-image-1.png",
   },
 ] satisfies Feature[];
 
 export function Features() {
   return (
-    <div id="features" className="flex w-full flex-col items-center gap-6 px-6 py-14 md:px-10 md:py-25">
+    <div id="features" className="flex w-full flex-col items-center gap-6 px-6 py-10 md:px-10 md:py-20">
       <Badge variant="secondary" className="uppercase">
         Features
       </Badge>

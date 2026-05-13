@@ -31,51 +31,77 @@ function AccordionContentFAQs(props: React.ComponentProps<typeof AccordionConten
 
 export function FAQs() {
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-6 py-14 md:grid-cols-2 md:gap-14 md:px-10 md:py-25">
+    <div className="mx-auto grid max-w-6xl gap-6 px-6 py-10 md:grid-cols-2 md:gap-14 md:px-10 md:py-20">
       <div className="flex w-full flex-col gap-6">
         <Badge variant="secondary" className="mb-2 uppercase">
           FAQ
         </Badge>
+
         <h2 className="text-3xl leading-[1.1] font-medium tracking-tight sm:text-5xl">
           Frequently
           <br />
           Asked <span className="text-muted-foreground">Questions</span>
         </h2>
+
         <p className="max-w-lg text-xs leading-6 tracking-tight sm:text-base">
-          Get answers to commonly asked questions.
+          Everything you need to know about CredMate and your credit health.
         </p>
+
         <Button className="w-fit" size="lg" asChild>
-          <Link href="/pricing">Get Started</Link>
+          <Link href="/signup">Get Started</Link>
         </Button>
       </div>
-      <Accordion type="single" collapsible defaultValue="branding" className="grid w-full gap-4">
-        <AccordionItemFAQs value="branding">
-          <AccordionTriggerFAQs>Will my app show your branding anywhere?</AccordionTriggerFAQs>
+
+      <Accordion type="single" collapsible defaultValue="credit-score" className="grid w-full gap-4">
+        <AccordionItemFAQs value="credit-score">
+          <AccordionTriggerFAQs>
+            How does CredMate help improve my credit score?
+          </AccordionTriggerFAQs>
+
           <AccordionContentFAQs>
             <p>
-              Never. Your app will be fully white-labeled with your own name, logo, and design. We stay completely
-              invisible.
+              CredMate analyzes your credit behavior and gives personalized suggestions like reducing utilization,
+              managing EMIs better, and avoiding common mistakes that hurt your score.
             </p>
           </AccordionContentFAQs>
         </AccordionItemFAQs>
-        <AccordionItemFAQs value="skills">
-          <AccordionTriggerFAQs>Do I need technical skills to use Acme?</AccordionTriggerFAQs>
+
+        <AccordionItemFAQs value="security">
+          <AccordionTriggerFAQs>
+            Is my financial data safe with CredMate?
+          </AccordionTriggerFAQs>
+
           <AccordionContentFAQs>
             <p>
-              No. We handle all the technical setup for you. You can focus on your business while we handle the rest.
+              Yes. Your financial data is encrypted and securely processed. We never sell your personal information to
+              third parties.
             </p>
           </AccordionContentFAQs>
         </AccordionItemFAQs>
-        <AccordionItemFAQs value="devices">
-          <AccordionTriggerFAQs>Will my app work on all devices?</AccordionTriggerFAQs>
+
+        <AccordionItemFAQs value="ai-insights">
+          <AccordionTriggerFAQs>
+            What kind of insights does the AI provide?
+          </AccordionTriggerFAQs>
+
           <AccordionContentFAQs>
-            <p>Yes. Our app is designed to work on all devices, including iOS and Android.</p>
+            <p>
+              The AI explains your credit report in simple language, identifies risky financial habits, and recommends
+              practical actions to improve your financial health.
+            </p>
           </AccordionContentFAQs>
         </AccordionItemFAQs>
-        <AccordionItemFAQs value="notifcations">
-          <AccordionTriggerFAQs>Can I send notifications and updates to users?</AccordionTriggerFAQs>
+
+        <AccordionItemFAQs value="eligibility">
+          <AccordionTriggerFAQs>
+            Can CredMate predict loan eligibility?
+          </AccordionTriggerFAQs>
+
           <AccordionContentFAQs>
-            <p>Yes. You can send notifications and updates to users through our app.</p>
+            <p>
+              CredMate helps estimate your financial readiness and highlights factors that may affect loan approvals,
+              giving you better clarity before applying.
+            </p>
           </AccordionContentFAQs>
         </AccordionItemFAQs>
       </Accordion>
