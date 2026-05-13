@@ -30,7 +30,7 @@ const links = [
             <span>LinkedIn</span>
           </div>
         ),
-        href: "https://www.linkedin.com/",
+        href: "https://www.linkedin.com/u/devuppal46",
         title: "Connect with us on LinkedIn",
       },
       {
@@ -40,7 +40,7 @@ const links = [
             <span>Github</span>
           </div>
         ),
-        href: "https://github.com/",
+        href: "https://github.com/devuppal46",
         title: "View our GitHub repository",
       },
     ],

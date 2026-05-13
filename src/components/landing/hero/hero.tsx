@@ -32,7 +32,7 @@ export function Hero() {
           Your personalized roadmap to freedom. 
         </p>
         <Button className="mb-14 w-fit" size="lg" asChild>
-          <Link href="/login">Get Started</Link>
+          <Link href="/dashboard">Get Started</Link>
         </Button>
         <Showcase />
         {/* <Image src="/app-image-1.png" alt="Hero" width={304} height={445} /> */}
