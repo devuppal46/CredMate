@@ -44,11 +44,10 @@ export function Features() {
         Features
       </Badge>
       <h2 className="text-center text-3xl leading-[1.1] font-medium tracking-tight sm:text-5xl">
-        Discover our<div className="text-muted-foreground">exceptional features</div>
+        CredMate AI<div className="text-muted-foreground">exceptional features</div>
       </h2>
       <p className="mb-3 max-w-lg text-center leading-6 tracking-tight sm:text-xl lg:mb-8">
-        We&apos;ve built the ultimate white-label app platform so you can focus on growing your brand - not building
-        tech
+        We&apos;ve built the ultimate white-label app platform 
       </p>
       <FeaturesCarousel features={features} className="block lg:hidden" />
       <FeaturesTabs features={features} className="hidden lg:block" />

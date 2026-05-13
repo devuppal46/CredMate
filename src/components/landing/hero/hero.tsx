@@ -2,13 +2,14 @@ import { Nav } from "@/components/landing/hero/nav";
 import { BackgroundBlur } from "@/components/ui/background-blur";
 import { Button } from "@/components/ui/button";
 import { Pill, PillAvatar, PillAvatarGroup } from "@/components/ui/pill";
+import { Showcase } from "@/components/landing/showcase/showcase";
 import Image from "next/image";
 import Link from "next/link";
 
 export function Hero() {
   return (
     <div className="z-1 grid w-full place-items-center p-8">
-      <BackgroundBlur className="-top-40 md:-top-0" />
+      <BackgroundBlur className="-top-40 md:top-0" />
       <Nav />
       <div className="mt-16 flex flex-col items-center gap-6">
         <Pill>
@@ -18,7 +19,7 @@ export function Hero() {
             <PillAvatar src="/avatars/3.jpg" />
             <PillAvatar src="/avatars/4.jpg" />
           </PillAvatarGroup>
-          <p className="text-muted-foreground px-2 text-xs font-medium sm:border-l-1 sm:text-sm">
+          <p className="text-muted-foreground px-2 text-xs font-medium sm:border-l sm:text-sm">
             Join <span className="text-foreground">5000+</span> borrowers becoming debt-free
           </p>
         </Pill>
@@ -26,11 +27,14 @@ export function Hero() {
           Conquer Your Debt<span className="text-muted-foreground block">Master Your Score</span>
         </h1>
         <p className="max-w-lg text-center leading-6 tracking-tight sm:text-xl">
-          Your personalized roadmap to freedom. Slash debt and rebuild your score with AI precision.
+          
+          Unlock your financial potential with CredMate AI <br></br>
+          Your personalized roadmap to freedom. 
         </p>
-        <Button className="mb-10 w-fit" size="lg" asChild>
+        <Button className="mb-14 w-fit" size="lg" asChild>
           <Link href="/login">Get Started</Link>
         </Button>
+        <Showcase />
         {/* <Image src="/app-image-1.png" alt="Hero" width={304} height={445} /> */}
       </div>
     </div>

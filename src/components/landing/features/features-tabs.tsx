@@ -4,7 +4,6 @@ import { FeatureDetails } from "@/components/landing/features/feature-details";
 import type { Feature } from "@/components/landing/features/features";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useState } from "react";
 
 type Props = {
@@ -30,9 +29,7 @@ export function FeaturesTabs({ features, className }: Props) {
       </TabsList>
       {features.map((feature) => (
         <TabsContent key={feature.title} value={feature.title}>
-          <div className="bg-card flex w-full justify-center rounded-lg border p-8 pb-0">
-            <Image src={feature.image} alt="App Image" width={304} height={445} />
-          </div>
+          <div className="bg-card flex w-full justify-center rounded-lg border p-8 pb-0" />
         </TabsContent>
       ))}
     </Tabs>
