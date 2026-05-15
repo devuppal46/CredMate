@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
@@ -21,40 +22,51 @@ export async function POST(req: Request) {
     const bytes = await file.arrayBuffer();
 
     const extractionPrompt = `
-      Extract the following data from this CIBIL report:
+      Extract the following information from this CIBIL report:
 
       1. Credit Score
       2. Total outstanding debt
-      3. Number of default accounts
-      4. EMI burden
+      3. Number of default or written-off accounts
+      4. Monthly EMI burden
       5. Overall financial health summary
 
-      Keep the response concise and readable.
+      Keep the response concise, readable, and structured.
     `;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
+
       contents: [
         {
-          inlineData: {
-            data: Buffer.from(bytes).toString("base64"),
-            mimeType: "application/pdf",
-          },
-        },
-        {
-          text: extractionPrompt,
+          role: "user",
+
+          parts: [
+            {
+              inlineData: {
+                mimeType: "application/pdf",
+                data: Buffer.from(bytes).toString("base64"),
+              },
+            },
+
+            {
+              text: extractionPrompt,
+            },
+          ],
         },
       ],
     });
 
     return NextResponse.json({
-      result: response.text,
+      result: response.text || "No response generated",
     });
-  } catch (error) {
-    console.error(error);
+
+  } catch (error: any) {
+    console.error("ANALYZE API ERROR:", error);
 
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: error.message || "Internal server error",
+      },
       { status: 500 }
     );
   }
