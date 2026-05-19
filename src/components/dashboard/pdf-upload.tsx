@@ -1,230 +1,149 @@
 "use client";
 
-import { useState } from "react";
+import { UploadCloud, FileText, CheckCircle, Activity, ShieldCheck, BarChart3, AlertCircle, Brain } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRef } from "react";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+interface PdfUploadProps {
+  file: File | null;
+  loading: boolean;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAnalyze: () => void;
+  summary: string;
+}
 
-export function PdfUpload() {
-  const [file, setFile] = useState<File | null>(null);
+export function PdfUpload({ file, loading, onFileChange, onAnalyze, summary }: PdfUploadProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [loading, setLoading] = useState(false);
-  const [chatLoading, setChatLoading] = useState(false);
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
 
-  const [summary, setSummary] = useState("");
-
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  const [input, setInput] = useState("");
-
-  // Handle PDF selection
-  function handleFileChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const selectedFile = event.target.files?.[0];
-
-    if (!selectedFile) return;
-
-    if (selectedFile.type !== "application/pdf") {
-      alert("Please upload a PDF file");
-      return;
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const event = {
+        target: { files: e.dataTransfer.files }
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+      onFileChange(event);
     }
-
-    setFile(selectedFile);
-  }
-
-  // Analyze uploaded PDF
-  async function handleAnalyze() {
-    if (!file) return;
-
-    try {
-      setLoading(true);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Analysis failed");
-      }
-
-      setSummary(data.result);
-
-    } catch (error: any) {
-      console.error(error);
-      alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Send follow-up chat message
-  async function handleSendMessage() {
-    if (!input.trim()) return;
-
-    const userMessage: Message = {
-      role: "user",
-      content: input,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-
-    const currentInput = input;
-
-    setInput("");
-
-    try {
-      setChatLoading(true);
-
-      const response = await fetch("/api/chat", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          summary,
-          message: currentInput,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Chat failed");
-      }
-
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: data.reply,
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-
-    } catch (error: any) {
-      console.error(error);
-      alert(error.message);
-    } finally {
-      setChatLoading(false);
-    }
-  }
+  };
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-6">
-
-      {/* Upload Card */}
-      <div className="rounded-xl border bg-card p-6">
-
-        <h2 className="text-2xl font-semibold">
-          Upload CIBIL Report
-        </h2>
-
-        <p className="text-muted-foreground mt-2 text-sm">
-          Upload your report and get AI-powered financial insights.
-        </p>
-
-        <div className="mt-6 flex flex-col gap-4">
-
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileChange}
-          />
-
-          {file && (
-            <div className="rounded-md border bg-secondary/40 p-3 text-sm">
-              <p className="font-medium">{file.name}</p>
-
-              <p className="text-muted-foreground">
-                {(file.size / 1024 / 1024).toFixed(2)} MB
-              </p>
-            </div>
-          )}
-
-          <button
-            onClick={handleAnalyze}
-            disabled={!file || loading}
-            className="rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50"
+    <div className="flex flex-col gap-6">
+      {!summary ? (
+        <Card className="border-dashed border-2 bg-card/50 hover:bg-card/80 transition-colors duration-300">
+          <CardContent className="flex flex-col items-center justify-center p-12 text-center"
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
           >
-            {loading ? "Analyzing..." : "Analyze Report"}
-          </button>
-        </div>
-      </div>
-
-      {/* Summary Section */}
-      {summary && (
-        <div className="rounded-xl border bg-card p-6">
-
-          <h3 className="text-lg font-semibold">
-            Financial Summary
-          </h3>
-
-          <div className="mt-4 whitespace-pre-wrap text-sm leading-6">
-            {summary}
-          </div>
-        </div>
-      )}
-
-      {/* Chat Section */}
-      {summary && (
-        <div className="rounded-xl border bg-card p-6">
-
-          <h3 className="text-lg font-semibold">
-            Ask Follow-up Questions
-          </h3>
-
-          {/* Messages */}
-          <div className="mt-6 flex max-h-[400px] flex-col gap-4 overflow-y-auto">
-
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`max-w-[85%] rounded-xl px-4 py-3 text-sm ${
-                  message.role === "user"
-                    ? "ml-auto bg-primary text-primary-foreground"
-                    : "bg-secondary"
-                }`}
-              >
-                {message.content}
-              </div>
-            ))}
-
-            {chatLoading && (
-              <div className="w-fit rounded-xl bg-secondary px-4 py-3 text-sm">
-                Thinking...
+            <div className="mb-4 rounded-full bg-primary/10 p-4">
+              <UploadCloud className="size-8 text-primary" />
+            </div>
+            <h3 className="mb-2 text-xl font-semibold">Upload CIBIL Report</h3>
+            <p className="mb-6 text-sm text-muted-foreground max-w-sm">
+              Drag and drop your PDF report here, or click to browse. We'll extract and analyze your financial profile securely.
+            </p>
+            <input 
+              type="file" 
+              accept=".pdf" 
+              className="hidden" 
+              ref={inputRef} 
+              onChange={onFileChange} 
+            />
+            <Button onClick={() => inputRef.current?.click()} variant="outline" className="mb-4">
+              Browse Files
+            </Button>
+            
+            {file && (
+              <div className="mt-4 flex w-full max-w-md items-center justify-between rounded-lg border border-border bg-background p-3 shadow-sm">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <FileText className="size-5 shrink-0 text-primary" />
+                  <div className="flex flex-col items-start overflow-hidden text-left">
+                    <span className="truncate text-sm font-medium w-[200px]">{file.name}</span>
+                    <span className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                  </div>
+                </div>
+                <Button onClick={onAnalyze} disabled={loading} size="sm" className="shrink-0">
+                  {loading ? "Analyzing..." : "Analyze"}
+                </Button>
               </div>
             )}
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {/* Status & Highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-primary text-primary-foreground border-transparent shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-20">
+                <Activity className="size-16" />
+              </div>
+              <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full gap-2">
+                <div>
+                  <p className="text-primary-foreground/80 text-sm font-medium mb-1">Credit Score</p>
+                  <div className="flex items-baseline gap-2">
+                    <h4 className="text-4xl font-bold tracking-tight">742</h4>
+                    <span className="text-sm">/ 900</span>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-sm bg-black/20 w-fit px-2.5 py-1 rounded-full backdrop-blur-md">
+                  <CheckCircle className="size-4" /> Good Standing
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-sm">
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-2">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-muted-foreground text-sm font-medium">Risk Level</p>
+                    <ShieldCheck className="size-5 text-success" />
+                  </div>
+                  <h4 className="text-2xl font-bold">Low Risk</h4>
+                </div>
+                <div className="mt-4 w-full bg-secondary rounded-full h-2">
+                  <div className="bg-success h-2 rounded-full w-[25%]"></div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-sm">
+              <CardContent className="p-6 flex flex-col justify-between h-full gap-2">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-muted-foreground text-sm font-medium">Debt Utilization</p>
+                    <BarChart3 className="size-5 text-accent" />
+                  </div>
+                  <h4 className="text-2xl font-bold">28%</h4>
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
+                  <AlertCircle className="size-3" /> Below recommended 30% limit
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Input */}
-          <div className="mt-6 flex gap-3">
-
-            <input
-              type="text"
-              placeholder="How can I improve my score?"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-1 rounded-md border bg-background px-4 py-2 text-sm outline-none"
-            />
-
-            <button
-              onClick={handleSendMessage}
-              disabled={chatLoading || !input.trim()}
-              className="rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50"
-            >
-              Send
-            </button>
-          </div>
-        </div>
+          {/* Detailed Summary */}
+          <Card className="shadow-sm border-border flex-1">
+            <CardHeader className="pb-4 border-b border-border">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Brain className="size-5 text-primary" />
+                AI Financial Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+                {summary.split('\n').map((paragraph, idx) => (
+                  <p key={idx} className="mb-4 last:mb-0">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </>
       )}
     </div>
   );
