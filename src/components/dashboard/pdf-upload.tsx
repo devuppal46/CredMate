@@ -10,7 +10,7 @@ interface PdfUploadProps {
   loading: boolean;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAnalyze: () => void;
-  summary: string;
+  summary?: string;
 }
 
 export function PdfUpload({ file, loading, onFileChange, onAnalyze, summary }: PdfUploadProps) {
