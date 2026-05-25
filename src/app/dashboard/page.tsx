@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PdfUpload } from "@/components/dashboard/pdf-upload";
 import { ChatBox, type Message } from "@/components/dashboard/chat-box";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { MetricsGrid } from "@/components/dashboard/metrics-grid";
 import { FinancialSummary } from "@/components/dashboard/financial-summary";
@@ -119,12 +118,9 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="flex h-screen w-full flex-col bg-background text-foreground overflow-hidden">
-      <DashboardHeader />
-      <DashboardLayout 
-        leftPanel={leftPanelContent}
-        rightPanel={rightPanelContent}
-      />
-    </div>
+    <DashboardLayout 
+      leftPanel={leftPanelContent}
+      rightPanel={rightPanelContent}
+    />
   );
 }
