@@ -1,7 +1,14 @@
 import { FileText, User, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { logout } from "@/actions/auth";
+
+const NAV_LINKS = [
+  { name: "Dashboard", href: "#", icon: LayoutDashboard },
+  { name: "Reports", href: "#", icon: FileText },
+  { name: "Settings", href: "#", icon: Settings },
+];
 
 export async function DashboardHeader() {
   const session = await auth();
@@ -9,7 +16,6 @@ export async function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
       <div className="flex items-center gap-3">
-        {/* Plain logo without background */}
         <Link href="/" className="flex items-center">
           <Image
             src="/logo.svg"
@@ -21,25 +27,25 @@ export async function DashboardHeader() {
           />
         </Link>
       </div>
+      
       <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-        <Link href="#" className="flex items-center gap-2 text-foreground transition-colors">
-          <LayoutDashboard className="size-4" /> Dashboard
-        </Link>
-        <Link href="#" className="flex items-center gap-2 hover:text-foreground transition-colors">
-          <FileText className="size-4" /> Reports
-        </Link>
-        <Link href="#" className="flex items-center gap-2 hover:text-foreground transition-colors">
-          <Settings className="size-4" /> Settings
-        </Link>
+        {NAV_LINKS.map((link) => {
+          const Icon = link.icon;
+          return (
+            <Link 
+              key={link.name} 
+              href={link.href} 
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
+            >
+              <Icon className="size-4" /> {link.name}
+            </Link>
+          );
+        })}
       </nav>
+
       <div className="flex items-center gap-4">
         {session?.user ? (
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          >
+          <form action={logout}>
             <button 
               type="submit" 
               className="flex items-center justify-center gap-2 rounded-full border border-border bg-secondary hover:bg-secondary/70 transition-colors px-3 py-1.5 text-sm font-medium"

@@ -5,12 +5,15 @@ import { Pill, PillAvatar, PillAvatarGroup } from "@/components/ui/pill";
 import { Showcase } from "@/components/landing/showcase/showcase";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
 
-export function Hero() {
+export async function Hero() {
+  const session = await auth();
+
   return (
     <div className="z-1 grid w-full place-items-center p-8">
       <BackgroundBlur className="-top-40 md:top-0" />
-      <Nav />
+      <Nav session={session} />
       <div className="mt-16 flex flex-col items-center gap-6">
         <Pill>
           <PillAvatarGroup className="hidden sm:flex">
@@ -32,7 +35,7 @@ export function Hero() {
           Your personalized roadmap to freedom. 
         </p>
         <Button className="mb-14 w-fit" size="lg" asChild>
-          <Link href="/dashboard">Get Started</Link>
+          <Link href={session ? "/dashboard" : "/login"}>Get Started</Link>
         </Button>
         <Showcase />
         {/* <Image src="/app-image-1.png" alt="Hero" width={304} height={445} /> */}

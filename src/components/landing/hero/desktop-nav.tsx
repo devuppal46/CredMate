@@ -8,6 +8,8 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { Session } from "next-auth";
+import { UserMenu } from "@/components/auth/user-menu";
 
 type Props = {
   items: {
@@ -15,9 +17,10 @@ type Props = {
     href: string;
   }[];
   className?: string;
+  session: Session | null;
 };
 
-export function DesktopNav({ items, className }: Props) {
+export function DesktopNav({ items, className, session }: Props) {
   return (
     <nav className={cn("mx-auto flex w-full max-w-7xl items-center justify-between gap-4", className)}>
       <Link href="/">
@@ -32,9 +35,13 @@ export function DesktopNav({ items, className }: Props) {
           ))}
         </NavigationMenuList>
       </NavigationMenu>
-      <Button asChild>
-        <Link href="/login">Get Started</Link>
-      </Button>
+      {session?.user ? (
+        <UserMenu user={session.user} />
+      ) : (
+        <Button asChild>
+          <Link href="/login">Sign In</Link>
+        </Button>
+      )}
     </nav>
   );
 }
