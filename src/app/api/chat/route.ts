@@ -1,57 +1,24 @@
 export const runtime = "nodejs";
 
-import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
+import { requireAuthenticatedSession } from "@/modules/auth/services/session.service";
+import {
+  answerReportQuestion,
+  toReportQuestionResponse,
+} from "@/modules/reports";
+import { toPublicError } from "@/shared/lib/app-error";
 
 export async function POST(req: Request) {
   try {
+    await requireAuthenticatedSession();
     const body = await req.json();
+    const reply = await answerReportQuestion(body);
 
-    const { summary, message } = body;
+    return NextResponse.json(toReportQuestionResponse(reply));
+  } catch (error: unknown) {
+    console.error("CHAT API ERROR:", error);
+    const { message, status } = toPublicError(error);
 
-    const prompt = `
-      You are a financial credit advisor AI.
-
-      Here is the user's CIBIL analysis:
-
-      ${summary}
-
-      User question:
-      ${message}
-
-      Give a practical, concise, easy-to-understand answer.
-    `;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: prompt,
-            },
-          ],
-        },
-      ],
-    });
-
-    return NextResponse.json({
-      reply: response.text,
-    });
-
-  } catch (error: any) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        error: error.message,
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status });
   }
 }

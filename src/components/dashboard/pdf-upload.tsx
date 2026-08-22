@@ -43,7 +43,7 @@ export function PdfUpload({ file, loading, onFileChange, onAnalyze, summary }: P
             </div>
             <h3 className="mb-2 text-xl font-semibold">Upload CIBIL Report</h3>
             <p className="mb-6 text-sm text-muted-foreground max-w-sm">
-              Drag and drop your PDF report here, or click to browse. We'll extract and analyze your financial profile securely.
+              Drag and drop your PDF report here, or click to browse. We&apos;ll extract and analyze your financial profile securely.
             </p>
             <input 
               type="file" 

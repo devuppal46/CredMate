@@ -1,4 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CredMate
+
+CredMate is a Next.js application for analyzing CIBIL reports and answering
+credit-health questions with Gemini.
+
+## Architecture
+
+This project is a modular layered monolith:
+
+app routes → module services → repositories / AI adapters → external systems
+
+- src/app contains pages, layouts, and thin API route handlers.
+- src/modules/auth owns authentication actions and session boundaries.
+- src/modules/reports owns report validation, analysis, chat workflows, DTOs,
+  and repository contracts.
+- src/modules/ai owns Gemini client setup, prompts, response parsing, and
+  AI-facing services.
+- src/modules/users owns user contracts and user-facing services.
+- src/shared contains cross-cutting infrastructure such as Prisma, server
+  configuration, error handling, and utilities.
+- src/components contains presentation components.
+
+The current report repository is an interface only: analysis is still
+ephemeral and is not persisted until Prisma models and repository
+implementations are added.
+
+Prisma Client is generated into src/generated/prisma. Run npm run prisma:generate
+after changing the Prisma schema; production builds run this automatically.
 
 ## Getting Started
 

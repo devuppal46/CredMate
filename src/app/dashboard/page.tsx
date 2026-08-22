@@ -43,9 +43,10 @@ export default function DashboardPage() {
         throw new Error(data.error || "Analysis failed");
       }
       setSummary(data.result);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      alert(error.message);
+      const message = error instanceof Error ? error.message : "Analysis failed";
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -71,9 +72,9 @@ export default function DashboardPage() {
       }
       const assistantMessage: Message = { role: "assistant", content: data.reply };
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      alert(error.message);
+      alert(error instanceof Error ? error.message : "Chat failed");
     } finally {
       setChatLoading(false);
     }

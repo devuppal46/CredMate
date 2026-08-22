@@ -2,11 +2,11 @@ import { FileText, User, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@/auth";
-import { logout } from "@/actions/auth";
+import { logout } from "@/modules/auth/services/auth.actions";
 
 const NAV_LINKS = [
-  { name: "Dashboard", href: "#", icon: LayoutDashboard },
-  { name: "Reports", href: "#", icon: FileText },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Reports", href: "/reports", icon: FileText },
   { name: "Settings", href: "#", icon: Settings },
 ];
 

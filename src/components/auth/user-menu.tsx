@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User, LogOut, LayoutDashboard } from "lucide-react";
-import { logout } from "@/actions/auth";
+import { logout } from "@/modules/auth/services/auth.actions";
 
 type UserMenuProps = {
   user: {

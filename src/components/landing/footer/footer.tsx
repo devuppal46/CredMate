@@ -1,5 +1,5 @@
 import { FooterBlur } from "@/components/landing/footer/footer-blur";
-import { XIcon, LinkedInIcon, GithubIcon } from "@/components/landing/footer/icons";
+import { LinkedInIcon, GithubIcon } from "@/components/landing/footer/icons";
 import Link from "next/link";
 
 const links = [

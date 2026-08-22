@@ -4,7 +4,7 @@ import { Menu, LogOut, LayoutDashboard, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Session } from "next-auth";
-import { logout } from "@/actions/auth";
+import { logout } from "@/modules/auth/services/auth.actions";
 
 type Props = {
   items: {

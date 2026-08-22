@@ -3,7 +3,6 @@ import { BackgroundBlur } from "@/components/ui/background-blur";
 import { Button } from "@/components/ui/button";
 import { Pill, PillAvatar, PillAvatarGroup } from "@/components/ui/pill";
 import { Showcase } from "@/components/landing/showcase/showcase";
-import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
 

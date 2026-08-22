@@ -13,18 +13,22 @@ type Props = {
 
 export function FeaturesCarousel({ features, className }: Props) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
 
   useEffect(() => {
     if (!carouselApi) {
       return;
     }
 
-    setCurrent(carouselApi.selectedScrollSnap() + 1);
-
-    carouselApi.on("select", () => {
+    const handleSelect = () => {
       setCurrent(carouselApi.selectedScrollSnap() + 1);
-    });
+    };
+
+    carouselApi.on("select", handleSelect);
+
+    return () => {
+      carouselApi.off("select", handleSelect);
+    };
   }, [carouselApi]);
 
   return (
