@@ -8,6 +8,15 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { MetricsGrid } from "@/components/dashboard/metrics-grid";
 import { FinancialSummary } from "@/components/dashboard/financial-summary";
 
+type RiskLevel = "Low" | "Medium" | "High" | "Unknown";
+
+interface Metrics {
+  creditScore: number | null;
+  creditScoreMax: number;
+  riskLevel: RiskLevel;
+  debtUtilization: number | null;
+}
+
 export default function DashboardPage() {
   return (
     <Suspense
@@ -23,11 +32,18 @@ function DashboardContent() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isLoadingReport, setIsLoadingReport] = useState(false);
   const [analysisError, setAnalysisError] = useState("");
   const [summary, setSummary] = useState("");
   const [reportId, setReportId] = useState("");
   const [conversationId, setConversationId] = useState("");
-  
+  const [metrics, setMetrics] = useState<Metrics>({
+    creditScore: null,
+    creditScoreMax: 900,
+    riskLevel: "Unknown",
+    debtUtilization: null,
+  });
+
   const [chatLoading, setChatLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -35,6 +51,8 @@ function DashboardContent() {
   useEffect(() => {
     const requestedReportId = searchParams.get("reportId");
     if (!requestedReportId || requestedReportId === reportId) return;
+
+    setIsLoadingReport(true);
     fetch(`/api/reports/${requestedReportId}`)
       .then(async (response) => {
         if (!response.ok) throw new Error("Unable to load report");
@@ -43,6 +61,12 @@ function DashboardContent() {
       .then((data) => {
         setReportId(data.reportId);
         setSummary(data.result);
+        setMetrics({
+          creditScore: data.creditScore ?? null,
+          creditScoreMax: data.creditScoreMax ?? 900,
+          riskLevel: data.riskLevel ?? "Unknown",
+          debtUtilization: data.debtUtilization ?? null,
+        });
         fetch(`/api/reports/${data.reportId}/conversation`)
           .then((conversationResponse) => conversationResponse.json())
           .then((conversation) => {
@@ -52,9 +76,12 @@ function DashboardContent() {
           .catch(() => {
             setConversationId("");
             setMessages([]);
-          });
+          })
+          .finally(() => setIsLoadingReport(false));
       })
-      .catch(() => undefined);
+      .catch(() => {
+        setIsLoadingReport(false);
+      });
   }, [searchParams, reportId]);
 
   // Handle PDF selection
@@ -86,6 +113,12 @@ function DashboardContent() {
       }
       setSummary(data.result);
       setReportId(data.reportId);
+      setMetrics({
+        creditScore: data.creditScore ?? null,
+        creditScoreMax: data.creditScoreMax ?? 900,
+        riskLevel: data.riskLevel ?? "Unknown",
+        debtUtilization: data.debtUtilization ?? null,
+      });
       router.replace(`/dashboard?reportId=${data.reportId}`, { scroll: false });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Analysis failed";
@@ -132,14 +165,24 @@ function DashboardContent() {
           Upload your CIBIL report to get AI-powered insights and risk assessment.
         </p>
       </div>
-      
-      {!summary ? (
+
+      {isLoadingReport ? (
+        /* Fix 3: Loading skeleton while restoring report from URL */
+        <div className="flex flex-col gap-6 animate-pulse">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 rounded-xl bg-muted/60" />
+            ))}
+          </div>
+          <div className="h-64 rounded-xl bg-muted/60" />
+        </div>
+      ) : !summary ? (
         <div className="flex-1 shrink-0 space-y-3">
-          <PdfUpload 
-            file={file} 
-            loading={loading} 
-            onFileChange={handleFileChange} 
-            onAnalyze={handleAnalyze} 
+          <PdfUpload
+            file={file}
+            loading={loading}
+            onFileChange={handleFileChange}
+            onAnalyze={handleAnalyze}
           />
           {analysisError && (
             <p role="alert" className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -149,7 +192,12 @@ function DashboardContent() {
         </div>
       ) : (
         <div className="flex flex-col gap-6">
-          <MetricsGrid />
+          <MetricsGrid
+            creditScore={metrics.creditScore}
+            creditScoreMax={metrics.creditScoreMax}
+            riskLevel={metrics.riskLevel}
+            debtUtilization={metrics.debtUtilization}
+          />
           <FinancialSummary summary={summary} />
         </div>
       )}
@@ -157,7 +205,7 @@ function DashboardContent() {
   );
 
   const rightPanelContent = (
-    <ChatBox 
+    <ChatBox
       messages={messages}
       input={input}
       setInput={setInput}
@@ -168,7 +216,7 @@ function DashboardContent() {
   );
 
   return (
-    <DashboardLayout 
+    <DashboardLayout
       leftPanel={leftPanelContent}
       rightPanel={rightPanelContent}
     />

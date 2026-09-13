@@ -1,5 +1,9 @@
 export type CreditAnalysis = {
   summary: string;
+  creditScore: number | null;
+  creditScoreMax: number;
+  riskLevel: "Low" | "Medium" | "High" | "Unknown";
+  debtUtilization: number | null;
 };
 
 export type AnalyzeReportInput = {

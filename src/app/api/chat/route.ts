@@ -6,18 +6,14 @@ import {
   answerReportQuestion,
 } from "@/modules/reports";
 import { toPublicError } from "@/shared/lib/app-error";
-import { PrismaUserRepository } from "@/modules/users/repositories/prisma-user.repository";
+import { resolveDbUserId } from "@/shared/lib/resolve-user";
 
 export async function POST(req: Request) {
   try {
     const session = await requireAuthenticatedSession();
     const body = await req.json();
 
-    // Resolve the actual DB user ID via email (session.user.id may be Google sub, not DB id)
-    const dbUser = session.user.email
-      ? await new PrismaUserRepository().findByEmail(session.user.email)
-      : null;
-    const userId = dbUser?.id ?? session.user.id;
+    const userId = await resolveDbUserId(session);
 
     const reply = await answerReportQuestion(body, userId);
 

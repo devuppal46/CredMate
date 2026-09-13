@@ -11,9 +11,9 @@ export async function analyzeReport(
   const file = validatePdfReport(input.file);
   const bytes = await file.arrayBuffer();
 
-  const summary = await analyzePdfWithGemini({
+  const analysis = await analyzePdfWithGemini({
     pdfBase64: Buffer.from(bytes).toString("base64"),
   });
 
-  return { summary };
+  return analysis;
 }
