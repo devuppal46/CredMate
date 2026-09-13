@@ -8,7 +8,7 @@ export async function answerReportQuestionWithGemini(
   input: ReportQuestionRequest
 ): Promise<string> {
   const response = await getGeminiClient().models.generateContent({
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-3.6-flash",
     contents: [
       {
         role: "user",
