@@ -7,6 +7,7 @@ export type AnalyzeReportResponseDto = {
 
 export type ReportQuestionResponseDto = {
   reply: string;
+  conversationId?: string;
 };
 
 export function toAnalyzeReportResponse(

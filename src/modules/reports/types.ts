@@ -9,6 +9,7 @@ export type AnalyzeReportInput = {
 export type AnswerReportQuestionInput = {
   reportId: string;
   message: string;
+  conversationId?: string;
 };
 
 export type StoredReportAnalysis = CreditAnalysis & {

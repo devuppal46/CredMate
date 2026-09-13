@@ -1,13 +1,13 @@
-import { FileText, User, LayoutDashboard, Settings } from "lucide-react";
+import { FileText, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@/auth";
-import { logout } from "@/modules/auth/services/auth.actions";
+import { UserMenu } from "@/components/auth/user-menu";
 
 const NAV_LINKS = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Reports", href: "/reports", icon: FileText },
-  { name: "Settings", href: "#", icon: Settings },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export async function DashboardHeader() {
@@ -45,19 +45,7 @@ export async function DashboardHeader() {
 
       <div className="flex items-center gap-4">
         {session?.user ? (
-          <form action={logout}>
-            <button 
-              type="submit" 
-              className="flex items-center justify-center gap-2 rounded-full border border-border bg-secondary hover:bg-secondary/70 transition-colors px-3 py-1.5 text-sm font-medium"
-            >
-              {session.user.image ? (
-                <Image src={session.user.image} alt="Avatar" width={20} height={20} className="rounded-full" />
-              ) : (
-                <User className="size-4" />
-              )}
-              <span className="max-w-[100px] truncate">{session.user.name?.split(' ')[0]}</span>
-            </button>
-          </form>
+          <UserMenu user={session.user} />
         ) : (
           <Link href="/login" className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:opacity-90 transition-opacity">
             Sign In

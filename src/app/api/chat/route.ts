@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import { requireAuthenticatedSession } from "@/modules/auth/services/session.service";
 import {
   answerReportQuestion,
-  toReportQuestionResponse,
 } from "@/modules/reports";
 import { toPublicError } from "@/shared/lib/app-error";
 
@@ -14,7 +13,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const reply = await answerReportQuestion(body, session.user.id);
 
-    return NextResponse.json(toReportQuestionResponse(reply));
+    return NextResponse.json(reply);
   } catch (error: unknown) {
     console.error("CHAT API ERROR:", error);
     const { message, status } = toPublicError(error);

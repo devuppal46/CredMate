@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { PdfUpload } from "@/components/dashboard/pdf-upload";
 import { ChatBox, type Message } from "@/components/dashboard/chat-box";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
@@ -8,14 +9,41 @@ import { MetricsGrid } from "@/components/dashboard/metrics-grid";
 import { FinancialSummary } from "@/components/dashboard/financial-summary";
 
 export default function DashboardPage() {
+  const searchParams = useSearchParams();
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState("");
   const [reportId, setReportId] = useState("");
+  const [conversationId, setConversationId] = useState("");
   
   const [chatLoading, setChatLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    const requestedReportId = searchParams.get("reportId");
+    if (!requestedReportId || requestedReportId === reportId) return;
+    fetch(`/api/reports/${requestedReportId}`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Unable to load report");
+        return response.json();
+      })
+      .then((data) => {
+        setReportId(data.reportId);
+        setSummary(data.result);
+        fetch(`/api/reports/${data.reportId}/conversation`)
+          .then((conversationResponse) => conversationResponse.json())
+          .then((conversation) => {
+            setConversationId(conversation.conversationId ?? "");
+            setMessages(conversation.messages ?? []);
+          })
+          .catch(() => {
+            setConversationId("");
+            setMessages([]);
+          });
+      })
+      .catch(() => undefined);
+  }, [searchParams, reportId]);
 
   // Handle PDF selection
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -66,9 +94,10 @@ export default function DashboardPage() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reportId, message: currentInput }),
+        body: JSON.stringify({ reportId, conversationId: conversationId || undefined, message: currentInput }),
       });
       const data = await response.json();
+      if (data.conversationId) setConversationId(data.conversationId);
       if (!response.ok) {
         throw new Error(data.error || "Chat failed");
       }

@@ -39,7 +39,7 @@ export function validateReportQuestion(
     throw new AppError("Invalid request body", 400, "INVALID_REQUEST");
   }
 
-  const { reportId, message } = payload as Record<string, unknown>;
+  const { reportId, message, conversationId } = payload as Record<string, unknown>;
 
   if (typeof reportId !== "string" || !reportId.trim()) {
     throw new AppError(
@@ -64,5 +64,8 @@ export function validateReportQuestion(
   return {
     reportId: reportId.trim(),
     message: message.trim(),
+    ...(typeof conversationId === "string" && conversationId.trim()
+      ? { conversationId: conversationId.trim() }
+      : {}),
   };
 }
