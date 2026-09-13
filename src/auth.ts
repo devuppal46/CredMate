@@ -12,19 +12,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
+    async jwt({ token, account }) {
+      if (account) {
+        token.id = token.sub;
       }
-
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        const userId = typeof token.id === "string" ? token.id : token.sub;
-        if (userId) session.user.id = userId;
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
-
       return session;
     },
   },
