@@ -4,6 +4,7 @@ import { Send, Bot, User, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { MarkdownRenderer } from "@/components/dashboard/markdown-renderer";
 
 export type Message = {
   role: "user" | "assistant";
@@ -64,7 +65,11 @@ export function ChatBox({ messages, input, setInput, loading, onSendMessage, dis
                 {msg.role === "user" ? <User className="size-4" /> : <Bot className="size-4" />}
               </div>
               <div className={cn("rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm", msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-card border border-border text-foreground")}>
-                {msg.content}
+                {msg.role === "assistant" ? (
+                  <MarkdownRenderer content={msg.content} compact />
+                ) : (
+                  msg.content
+                )}
               </div>
             </div>
           ))

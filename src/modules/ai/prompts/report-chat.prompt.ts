@@ -11,6 +11,6 @@ export function createReportChatPrompt(input: {
     "User question:",
     input.question,
     "",
-    "Give a practical, concise, easy-to-understand answer. Do not invent financial facts that are not in the analysis.",
+    "Keep your answer short — 1 to 3 sentences unless the user explicitly asks for more detail (e.g. 'explain in detail', 'tell me more'). Be direct and practical. Do not invent financial facts that are not in the analysis.",
   ].join("\n");
 }

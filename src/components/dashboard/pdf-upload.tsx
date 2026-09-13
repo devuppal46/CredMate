@@ -4,6 +4,7 @@ import { UploadCloud, FileText, CheckCircle, Activity, ShieldCheck, BarChart3, A
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRef } from "react";
+import { MarkdownRenderer } from "@/components/dashboard/markdown-renderer";
 
 interface PdfUploadProps {
   file: File | null;
@@ -80,45 +81,45 @@ export function PdfUpload({ file, loading, onFileChange, onAnalyze, summary }: P
               <div className="absolute top-0 right-0 p-4 opacity-20">
                 <Activity className="size-16" />
               </div>
-              <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full gap-2">
+              <CardContent className="p-4 relative z-10 flex flex-col justify-between h-full gap-1.5">
                 <div>
-                  <p className="text-primary-foreground/80 text-sm font-medium mb-1">Credit Score</p>
+                  <p className="text-primary-foreground/80 text-sm font-medium mb-0.5">Credit Score</p>
                   <div className="flex items-baseline gap-2">
                     <h4 className="text-4xl font-bold tracking-tight">742</h4>
                     <span className="text-sm">/ 900</span>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center gap-2 text-sm bg-black/20 w-fit px-2.5 py-1 rounded-full backdrop-blur-md">
+                <div className="mt-2 flex items-center gap-2 text-sm bg-black/20 w-fit px-2.5 py-1 rounded-full backdrop-blur-md">
                   <CheckCircle className="size-4" /> Good Standing
                 </div>
               </CardContent>
             </Card>
             
             <Card className="shadow-sm">
-              <CardContent className="p-6 flex flex-col justify-between h-full gap-2">
+              <CardContent className="p-4 flex flex-col justify-between h-full gap-1.5">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1">
                     <p className="text-muted-foreground text-sm font-medium">Risk Level</p>
                     <ShieldCheck className="size-5 text-success" />
                   </div>
                   <h4 className="text-2xl font-bold">Low Risk</h4>
                 </div>
-                <div className="mt-4 w-full bg-secondary rounded-full h-2">
+                <div className="mt-2 w-full bg-secondary rounded-full h-2">
                   <div className="bg-success h-2 rounded-full w-[25%]"></div>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="shadow-sm">
-              <CardContent className="p-6 flex flex-col justify-between h-full gap-2">
+              <CardContent className="p-4 flex flex-col justify-between h-full gap-1.5">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1">
                     <p className="text-muted-foreground text-sm font-medium">Debt Utilization</p>
                     <BarChart3 className="size-5 text-accent" />
                   </div>
                   <h4 className="text-2xl font-bold">28%</h4>
                 </div>
-                <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
+                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
                   <AlertCircle className="size-3" /> Below recommended 30% limit
                 </p>
               </CardContent>
@@ -134,14 +135,8 @@ export function PdfUpload({ file, loading, onFileChange, onAnalyze, summary }: P
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
-                {summary.split('\n').map((paragraph, idx) => (
-                  <p key={idx} className="mb-4 last:mb-0">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </CardContent>
+                <MarkdownRenderer content={summary} />
+              </CardContent>
           </Card>
         </>
       )}
