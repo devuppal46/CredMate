@@ -7,7 +7,7 @@ export type AnalyzeReportInput = {
 };
 
 export type AnswerReportQuestionInput = {
-  summary: string;
+  reportId: string;
   message: string;
 };
 

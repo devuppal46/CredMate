@@ -11,6 +11,7 @@ export default function DashboardPage() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState("");
+  const [reportId, setReportId] = useState("");
   
   const [chatLoading, setChatLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -43,6 +44,7 @@ export default function DashboardPage() {
         throw new Error(data.error || "Analysis failed");
       }
       setSummary(data.result);
+      setReportId(data.reportId);
     } catch (error: unknown) {
       console.error(error);
       const message = error instanceof Error ? error.message : "Analysis failed";
@@ -64,7 +66,7 @@ export default function DashboardPage() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ summary, message: currentInput }),
+        body: JSON.stringify({ reportId, message: currentInput }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -114,7 +116,7 @@ export default function DashboardPage() {
       setInput={setInput}
       loading={chatLoading}
       onSendMessage={handleSendMessage}
-      disabled={!summary}
+      disabled={!reportId}
     />
   );
 

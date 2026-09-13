@@ -39,9 +39,9 @@ export function validateReportQuestion(
     throw new AppError("Invalid request body", 400, "INVALID_REQUEST");
   }
 
-  const { summary, message } = payload as Record<string, unknown>;
+  const { reportId, message } = payload as Record<string, unknown>;
 
-  if (typeof summary !== "string" || !summary.trim()) {
+  if (typeof reportId !== "string" || !reportId.trim()) {
     throw new AppError(
       "An analysis summary is required before chatting.",
       400,
@@ -62,7 +62,7 @@ export function validateReportQuestion(
   }
 
   return {
-    summary: summary.trim(),
+    reportId: reportId.trim(),
     message: message.trim(),
   };
 }

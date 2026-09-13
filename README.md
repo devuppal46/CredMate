@@ -20,9 +20,9 @@ app routes → module services → repositories / AI adapters → external syste
   configuration, error handling, and utilities.
 - src/components contains presentation components.
 
-The current report repository is an interface only: analysis is still
-ephemeral and is not persisted until Prisma models and repository
-implementations are added.
+The Prisma models and initial migration are now defined. The report
+repository is still an interface only, so analysis remains ephemeral until
+concrete repository implementations are connected to the services.
 
 Prisma Client is generated into src/generated/prisma. Run npm run prisma:generate
 after changing the Prisma schema; production builds run this automatically.

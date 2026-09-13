@@ -1,6 +1,7 @@
 import type { CreditAnalysis } from "@/modules/reports/types";
 
 export type AnalyzeReportResponseDto = {
+  reportId: string;
   result: string;
 };
 
@@ -9,9 +10,10 @@ export type ReportQuestionResponseDto = {
 };
 
 export function toAnalyzeReportResponse(
-  analysis: CreditAnalysis
+  analysis: CreditAnalysis,
+  reportId = ""
 ): AnalyzeReportResponseDto {
-  return { result: analysis.summary };
+  return { reportId, result: analysis.summary };
 }
 
 export function toReportQuestionResponse(

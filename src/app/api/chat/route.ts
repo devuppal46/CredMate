@@ -10,9 +10,9 @@ import { toPublicError } from "@/shared/lib/app-error";
 
 export async function POST(req: Request) {
   try {
-    await requireAuthenticatedSession();
+    const session = await requireAuthenticatedSession();
     const body = await req.json();
-    const reply = await answerReportQuestion(body);
+    const reply = await answerReportQuestion(body, session.user.id);
 
     return NextResponse.json(toReportQuestionResponse(reply));
   } catch (error: unknown) {

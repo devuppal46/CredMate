@@ -8,4 +8,6 @@ export interface ReportRepository {
     reportId: string,
     userId: string
   ): Promise<StoredReportAnalysis | null>;
+  listForUser(userId: string): Promise<StoredReportAnalysis[]>;
+  deleteForUser(reportId: string, userId: string): Promise<boolean>;
 }
