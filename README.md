@@ -1,63 +1,142 @@
 # CredMate
 
-CredMate is a Next.js application for analyzing CIBIL reports and answering
-credit-health questions with Gemini.
+> **AI-powered credit health intelligence and debt advisory platform.**  
+> Turn complex CIBIL and credit report PDFs into actionable score breakdowns, risk evaluations, and personalized AI-driven financial roadmaps.
 
-## Architecture
+---
 
-This project is a modular layered monolith:
+## Architecture and Flow
 
-app routes → module services → repositories / AI adapters → external systems
+```mermaid
+flowchart TD
+    subgraph Client ["Client (Next.js Dashboard)"]
+        A[Upload CIBIL PDF] --> B[View Metrics and Summary]
+        B --> C[Interactive AI Chat]
+    end
 
-- src/app contains pages, layouts, and thin API route handlers.
-- src/modules/auth owns authentication actions and session boundaries.
-- src/modules/reports owns report validation, analysis, chat workflows, DTOs,
-  and repository contracts.
-- src/modules/ai owns Gemini client setup, prompts, response parsing, and
-  AI-facing services.
-- src/modules/users owns user contracts and user-facing services.
-- src/shared contains cross-cutting infrastructure such as Prisma, server
-  configuration, error handling, and utilities.
-- src/components contains presentation components.
+    subgraph Server ["Next.js Backend and API Routes"]
+        D["/api/analyze"]
+        E["/api/chat"]
+        F["Session and Auth Boundary (Auth.js)"]
+    end
 
-The Prisma models and initial migration are now defined. The report
-repository is still an interface only, so analysis remains ephemeral until
-concrete repository implementations are connected to the services.
+    subgraph AI ["Gemini AI Engine"]
+        G[Gemini 2.5 Flash: PDF Extraction]
+        H[Gemini 2.5 Flash: Contextual Q&A]
+    end
 
-Prisma Client is generated into src/generated/prisma. Run npm run prisma:generate
-after changing the Prisma schema; production builds run this automatically.
+    subgraph Data ["Database (PostgreSQL and Prisma)"]
+        I[(User Profile)]
+        J[(Reports and Extracted Metrics)]
+        K[(Chat Conversations and History)]
+    end
+
+    %% Upload Flow
+    A -->|1. Multipart PDF| F
+    F --> D
+    D -->|2. Buffer stream| G
+    G -->|3. Score, Risk, Utilization and Summary| D
+    D -->|4. Persist Report Data| J
+    J -->|5. Return Analysis DTO| B
+
+    %% Chat Flow
+    C -->|6. Ask Question| F
+    F --> E
+    E -->|7. Fetch Report Context and History| J & K
+    E -->|8. Prompt with Report Context| H
+    H -->|9. AI Recommendation| E
+    E -->|10. Store Message and Respond| K
+    K -->|11. Render Answer in Chat| C
+```
+
+---
+
+## Key Features
+
+- **Deep CIBIL Report Extraction**: Upload PDF credit reports to instantly extract credit score, score range, debt utilization, and overall risk tier.
+- **Context-Aware AI Assistant**: Ask questions about your report in plain English (for example, *"How can I improve my score by 50 points?"*, *"Which loan should I pay off first?"*).
+- **Dynamic Metric Dashboards**: Clean visualization of your credit profile, debt ratio, and risk assessment with real-time feedback.
+- **Multi-Session Report History**: Persist past reports and associated AI conversations seamlessly across logins.
+- **Secure and Private**: Enterprise-grade session handling with Auth.js and encrypted database connections.
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Framework** | [Next.js 16](https://nextjs.org/) (App Router, Turbopack) and [React 19](https://react.dev/) |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/), Radix UI Primitives, Lucide Icons |
+| **AI / LLM** | [Google Gemini 2.5 Flash](https://ai.google.dev/) (`@google/genai`) |
+| **Database and ORM** | [PostgreSQL](https://www.postgresql.org/) (Neon / Supabase), [Prisma ORM 7](https://www.prisma.io/) |
+| **Authentication** | [Auth.js (NextAuth v5)](https://authjs.dev/) with Google OAuth Provider |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
+- **Node.js**: `v20.x` or higher
+- **PostgreSQL**: Local instance or cloud database (such as Neon or Supabase)
+- **Google Gemini API Key**: [Google AI Studio](https://aistudio.google.com/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 2. Environment Setup
+Create a `.env.local` file in the root directory:
+
+```env
+# App
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your_nextauth_secret_key"
+
+# Database
+DATABASE_URL="postgresql://user:password@host:port/credmate?sslmode=require"
+
+# Google OAuth
+AUTH_GOOGLE_ID="your_google_client_id"
+AUTH_GOOGLE_SECRET="your_google_client_secret"
+
+# Gemini AI
+GEMINI_API_KEY="your_gemini_api_key"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Install and Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Generate Prisma Client and push schema to database
+npm run prisma:generate
+npx prisma db push
 
-## Learn More
+# Start the development server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```text
+src/
+├── app/                  # Next.js App Router (pages, layouts, API routes)
+│   ├── (public)/         # Landing page and public routes
+│   ├── api/              # /analyze, /chat, /reports API endpoints
+│   └── dashboard/        # Authenticated dashboard and report views
+├── components/           # UI components (dashboard, landing, shared)
+├── modules/              # Domain-driven feature modules
+│   ├── ai/               # Gemini AI client, prompts, and analysis services
+│   ├── auth/             # Authentication services and session management
+│   ├── reports/          # Report processing, DTOs, and repositories
+│   └── users/            # User repositories and account syncing
+└── shared/               # Cross-cutting concerns (DB Prisma client, errors, config)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License.
