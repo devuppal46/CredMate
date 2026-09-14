@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     });
 
     stage = "saving report";
-    const report = await new PrismaReportRepository().create({ userId: user.id, summary: analysis.summary });
+    const report = await new PrismaReportRepository().create({ userId: user.id, ...analysis });
     return NextResponse.json(toAnalyzeReportResponse(analysis, report.id));
   } catch (error: unknown) {
     console.error("ANALYZE API ERROR", { stage, error });
